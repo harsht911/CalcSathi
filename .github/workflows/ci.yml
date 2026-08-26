@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  calc_core:
+    name: calc_core (pure Dart)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+      - run: dart pub get
+        working-directory: packages/calc_core
+      - run: dart analyze
+        working-directory: packages/calc_core
+      - run: dart test
+        working-directory: packages/calc_core
+
+  mobile:
+    name: apps/mobile (Flutter)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
+        working-directory: apps/mobile
+      - run: flutter analyze
+        working-directory: apps/mobile
+      - run: flutter test
+        working-directory: apps/mobile
+
+  admin:
+    name: apps/admin (Flutter Web)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
+        working-directory: apps/admin
+      - run: flutter analyze
+        working-directory: apps/admin
+      - run: flutter test
+        working-directory: apps/admin
+      - run: flutter build web
+        working-directory: apps/admin
+
+  server:
+    name: server (Node/Express)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+      - run: npm install
+        working-directory: server
+      - run: npm run lint
+        working-directory: server
+      - run: npm test
+        working-directory: server

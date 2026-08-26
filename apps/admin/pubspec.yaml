@@ -1,0 +1,30 @@
+name: calcsathi_admin
+description: >
+  CalcSathi admin panel (Flutter Web) — internal tool for managing the
+  calculator catalog, users, coin economy, and subscriptions.
+publish_to: "none"
+version: 0.1.0+1
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  calc_core:
+    path: ../../packages/calc_core
+
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.3.1
+  cloud_firestore: ^5.4.4
+
+  provider: ^6.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true

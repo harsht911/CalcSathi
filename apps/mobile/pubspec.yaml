@@ -1,0 +1,49 @@
+name: calcsathi_mobile
+description: >
+  CalcSathi — a universal calculator platform. Dozens of calculators, a
+  coin-based free tier, Premium subscriptions, and a custom formula builder.
+publish_to: "none"
+version: 0.1.0+1
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  calc_core:
+    path: ../../packages/calc_core
+
+  # Firebase — free on Spark (Auth, Firestore, Messaging, Analytics,
+  # Crashlytics, App Check). No Cloud Functions client SDK needed: the
+  # `server/` service is called over plain HTTPS instead.
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.3.1
+  cloud_firestore: ^5.4.4
+  firebase_messaging: ^15.1.3
+  firebase_analytics: ^11.3.3
+  firebase_crashlytics: ^4.1.3
+  firebase_app_check: ^0.3.1+3
+
+  # Auth providers wired to the "no phone/OTP" decision (Spark plan doesn't
+  # support real SMS delivery).
+  google_sign_in: ^6.2.2
+  sign_in_with_apple: ^6.1.3
+
+  # State management — kept simple and explicit rather than pulling in a
+  # heavier framework this early.
+  provider: ^6.1.2
+
+  # In-app purchases / subscriptions, via RevenueCat (webhooks land on
+  # server/, not on a Cloud Function).
+  purchases_flutter: ^8.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
