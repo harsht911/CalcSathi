@@ -34,7 +34,7 @@ dependencies:
 
   # Receives the deep link when a user taps a passwordless email-link
   # sign-in link (App Links on Android, Universal Links on iOS).
-  app_links: ^7.2.1
+  app_links: ^7.0.0
 
   # Caches the email address an email-link sign-in was requested for, so
   # completing the sign-in on the same device doesn't have to ask again.
