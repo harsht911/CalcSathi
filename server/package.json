@@ -11,7 +11,8 @@
     "dev": "node --watch src/index.js",
     "start": "node src/index.js",
     "test": "node --test test/*.test.js",
-    "lint": "eslint src test"
+    "lint": "eslint src test scripts",
+    "seed:calculators": "node scripts/seed-calculators.js"
   },
   "dependencies": {
     "express": "^4.21.1",

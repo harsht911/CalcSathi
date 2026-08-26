@@ -1,0 +1,60 @@
+{
+  "calculators": [
+    {
+      "id": "emi",
+      "name": "EMI Calculator",
+      "category": "Loans",
+      "description": "Estimate the monthly instalment (EMI) on a loan given the principal, annual interest rate, and tenure.",
+      "inputs": [
+        { "key": "principal", "label": "Loan amount", "suffix": "₹", "min": 1 },
+        { "key": "annualRate", "label": "Annual interest rate", "suffix": "%", "min": 0.01, "max": 100 },
+        { "key": "tenureMonths", "label": "Tenure", "suffix": "months", "isInteger": true, "min": 1, "max": 480 }
+      ],
+      "formulaTokens": [
+        "principal", "*", "(", "annualRate", "/", "1200", ")", "*",
+        "(", "1", "+", "(", "annualRate", "/", "1200", ")", ")", "^", "tenureMonths",
+        "/",
+        "(", "(", "1", "+", "(", "annualRate", "/", "1200", ")", ")", "^", "tenureMonths", "-", "1", ")"
+      ],
+      "resultLabel": "Monthly EMI",
+      "resultSuffix": "₹",
+      "resultDecimalPlaces": 2
+    },
+    {
+      "id": "sip",
+      "name": "SIP Calculator",
+      "category": "Investing",
+      "description": "Estimate the maturity value of a monthly SIP investment given the expected annual return and tenure.",
+      "inputs": [
+        { "key": "monthlyInvestment", "label": "Monthly investment", "suffix": "₹", "min": 1 },
+        { "key": "expectedReturn", "label": "Expected annual return", "suffix": "%", "min": 0.01, "max": 100 },
+        { "key": "tenureMonths", "label": "Tenure", "suffix": "months", "isInteger": true, "min": 1, "max": 600 }
+      ],
+      "formulaTokens": [
+        "monthlyInvestment", "*",
+        "(", "(", "(", "1", "+", "(", "expectedReturn", "/", "1200", ")", ")", "^", "tenureMonths", "-", "1", ")",
+        "/", "(", "expectedReturn", "/", "1200", ")", ")",
+        "*", "(", "1", "+", "(", "expectedReturn", "/", "1200", ")", ")"
+      ],
+      "resultLabel": "Maturity value",
+      "resultSuffix": "₹",
+      "resultDecimalPlaces": 2
+    },
+    {
+      "id": "bmi",
+      "name": "BMI Calculator",
+      "category": "Health",
+      "description": "Body Mass Index from your weight and height.",
+      "inputs": [
+        { "key": "weightKg", "label": "Weight", "suffix": "kg", "min": 1, "max": 500 },
+        { "key": "heightCm", "label": "Height", "suffix": "cm", "min": 30, "max": 300 }
+      ],
+      "formulaTokens": [
+        "weightKg", "/", "(", "(", "heightCm", "/", "100", ")", "^", "2", ")"
+      ],
+      "resultLabel": "BMI",
+      "resultSuffix": "",
+      "resultDecimalPlaces": 1
+    }
+  ]
+}

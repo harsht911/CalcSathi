@@ -37,6 +37,21 @@ service cloud.firestore {
         allow read: if isOwner(uid);
         allow write: if false;
       }
+
+      // One entry per completed calculator run. Write-once (create only) —
+      // a user's calculation history isn't something the client should be
+      // able to edit after the fact.
+      match /history/{entryId} {
+        allow read, create: if isOwner(uid);
+        allow update, delete: if false;
+      }
+
+      // Favorited calculators, keyed by calculator ID so "is this
+      // favorited" is a single doc read/existence-check rather than a
+      // query. Fully owner-managed (unlike history, which is append-only).
+      match /favorites/{calculatorId} {
+        allow read, write: if isOwner(uid);
+      }
     }
 
     // Calculator catalog: readable by any signed-in user, writable only by
