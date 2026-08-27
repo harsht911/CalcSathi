@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../auth/state/auth_state.dart';
 import '../data/calculator_repository.dart';
-import 'calculator_runner_screen.dart';
+import 'calculator_navigation.dart';
 
 class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({super.key});
@@ -71,8 +71,6 @@ class FavoritesScreen extends StatelessWidget {
       );
       return;
     }
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => CalculatorRunnerScreen(definition: definition)),
-    );
+    openCalculator(context, definition);
   }
 }

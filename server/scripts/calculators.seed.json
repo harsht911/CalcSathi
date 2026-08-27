@@ -55,6 +55,79 @@
       "resultLabel": "BMI",
       "resultSuffix": "",
       "resultDecimalPlaces": 1
+    },
+    {
+      "id": "gst",
+      "name": "GST Calculator",
+      "category": "Tax",
+      "description": "Add GST to a base amount to see the final price.",
+      "inputs": [
+        { "key": "amount", "label": "Base amount", "suffix": "₹", "min": 0 },
+        { "key": "gstRate", "label": "GST rate", "suffix": "%", "min": 0, "max": 100 }
+      ],
+      "formulaTokens": [
+        "amount", "*", "(", "1", "+", "(", "gstRate", "/", "100", ")", ")"
+      ],
+      "resultLabel": "Total (incl. GST)",
+      "resultSuffix": "₹",
+      "resultDecimalPlaces": 2
+    },
+    {
+      "id": "km-to-miles",
+      "name": "KM to Miles Converter",
+      "category": "Utilities",
+      "description": "Convert a distance from kilometers to miles.",
+      "inputs": [
+        { "key": "km", "label": "Distance", "suffix": "km", "min": 0 }
+      ],
+      "formulaTokens": [
+        "km", "*", "0.621371"
+      ],
+      "resultLabel": "Distance",
+      "resultSuffix": "miles",
+      "resultDecimalPlaces": 2
+    },
+    {
+      "id": "loan-eligibility",
+      "name": "Loan Eligibility Calculator",
+      "category": "Loans",
+      "description": "Estimate the maximum loan amount you could be eligible for, based on the EMI you can afford each month.",
+      "inputs": [
+        { "key": "affordableEmi", "label": "Affordable monthly EMI", "suffix": "₹", "min": 1 },
+        { "key": "annualRate", "label": "Annual interest rate", "suffix": "%", "min": 0.01, "max": 100 },
+        { "key": "tenureMonths", "label": "Tenure", "suffix": "months", "isInteger": true, "min": 1, "max": 480 }
+      ],
+      "formulaTokens": [
+        "affordableEmi", "*",
+        "(", "(", "1", "+", "(", "annualRate", "/", "1200", ")", ")", "^", "tenureMonths", "-", "1", ")",
+        "/",
+        "(", "(", "annualRate", "/", "1200", ")", "*", "(", "1", "+", "(", "annualRate", "/", "1200", ")", ")", "^", "tenureMonths", ")"
+      ],
+      "resultLabel": "Max loan amount",
+      "resultSuffix": "₹",
+      "resultDecimalPlaces": 2
+    },
+    {
+      "id": "age",
+      "name": "Age Calculator",
+      "category": "Utilities",
+      "description": "Find your exact age in years, months, and days from your date of birth.",
+      "inputs": [],
+      "formulaTokens": [],
+      "resultLabel": "Age",
+      "resultSuffix": "years",
+      "resultDecimalPlaces": 0
+    },
+    {
+      "id": "cgpa",
+      "name": "CGPA Calculator",
+      "category": "Education",
+      "description": "Compute your overall CGPA from each subject's credits and grade point.",
+      "inputs": [],
+      "formulaTokens": [],
+      "resultLabel": "CGPA",
+      "resultSuffix": "/10",
+      "resultDecimalPlaces": 2
     }
   ]
 }
