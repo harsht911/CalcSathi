@@ -23,5 +23,23 @@ export function createApp() {
   app.use('/webhooks/revenuecat', revenueCatWebhookRouter);
   app.use('/coins', coinsRouter);
 
+  // Catch-all error handler — belt-and-suspenders defense in depth. Every
+  // route above already handles its own known failure modes explicitly and
+  // responds with a clean JSON error; this only fires if something new
+  // slips through uncaught. Without it, an escaped error falls through to
+  // Express's default handler, which replies with a bare, undetailed
+  // "Internal Server Error" — exactly the kind of response that's
+  // impossible to debug on Lambda, where there's no live console to watch.
+  // Logging err.stack here means the real cause always lands in CloudWatch
+  // Logs (or the terminal, for local dev), whatever it turns out to be.
+  // eslint-disable-next-line no-unused-vars
+  app.use((err, req, res, next) => {
+    console.error('Unhandled error:', err?.stack || err);
+    if (res.headersSent) {
+      return;
+    }
+    res.status(500).json({ error: 'internal_error' });
+  });
+
   return app;
 }

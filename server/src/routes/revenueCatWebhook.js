@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import admin from 'firebase-admin';
 
 import { getFirebaseAdmin } from '../firebaseAdmin.js';
 
@@ -42,23 +43,46 @@ revenueCatWebhookRouter.post('/', async (req, res) => {
     return res.status(400).json({ error: 'missing_event_fields' });
   }
 
-  const admin = getFirebaseAdmin();
-  const db = admin.firestore();
+  // Everything below talks to Firebase (service-account init + a Firestore
+  // write), both of which can fail for reasons outside our control (bad/
+  // expired credentials, a transient network error, a permissions issue).
+  // This MUST be try/caught explicitly: Express 4 does not catch a
+  // rejected promise thrown inside an async route handler on its own, so
+  // an unguarded failure here becomes an unhandled rejection. Locally that
+  // just logs a scary stack trace and hangs the request; on Lambda it
+  // crashes the entire invocation, which is what produced the opaque
+  // "Internal Server Error" (no JSON body, no detail) seen when this
+  // webhook was first wired up — the real cause was invisible without this
+  // catch block and a look at CloudWatch Logs.
+  try {
+    // getFirebaseAdmin() returns the initialized Firebase App instance, not
+    // the top-level `admin` module — using that same name here would shadow
+    // the real `admin` import above and silently break
+    // `admin.firestore.FieldValue`, which only exists as a static on the
+    // module, not on an App instance (an App instance's own `.firestore()`
+    // still works fine as a function call, which is what made this bug easy
+    // to miss until it actually ran).
+    const firebaseApp = getFirebaseAdmin();
+    const db = firebaseApp.firestore();
 
-  // TODO: once the Firestore schema for users/{uid} is finalized, replace
-  // this with the real entitlement fields (isPremium, expiresAt, plan, ...).
-  await db
-    .collection('users')
-    .doc(event.app_user_id)
-    .set(
-      {
-        lastRevenueCatEvent: {
-          type: event.type,
-          receivedAt: admin.firestore.FieldValue.serverTimestamp(),
+    // TODO: once the Firestore schema for users/{uid} is finalized, replace
+    // this with the real entitlement fields (isPremium, expiresAt, plan, ...).
+    await db
+      .collection('users')
+      .doc(event.app_user_id)
+      .set(
+        {
+          lastRevenueCatEvent: {
+            type: event.type,
+            receivedAt: admin.firestore.FieldValue.serverTimestamp(),
+          },
         },
-      },
-      { merge: true }
-    );
+        { merge: true }
+      );
 
-  res.status(200).json({ received: true });
+    res.status(200).json({ received: true });
+  } catch (err) {
+    console.error('RevenueCat webhook: failed to write entitlement state to Firestore', err);
+    res.status(500).json({ error: 'internal_error' });
+  }
 });
