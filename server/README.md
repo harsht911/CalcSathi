@@ -28,6 +28,10 @@ locked in.)
   transaction, server-side, so a modified client can't just overwrite its
   own coin balance. Requires a Firebase ID token in `Authorization: Bearer
   <token>`.
+- `POST /coins/earn` — grants a fixed, cooldown-limited coin reward.
+  **Placeholder** for the real ad-based earn flow (no ad SDK is wired into
+  the app yet) — see the route's doc comment in `src/routes/coins.js`.
+  Same auth requirement as `/coins/spend`.
 
 ## Local setup
 

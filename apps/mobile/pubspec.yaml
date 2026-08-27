@@ -48,6 +48,11 @@ dependencies:
   # server/, not on a Cloud Function).
   purchases_flutter: ^8.2.1
 
+  # Plain HTTPS calls to server/'s /coins/spend and /coins/earn routes (see
+  # CoinRepository) — no Cloud Functions client SDK needed here either,
+  # same reasoning as the RevenueCat webhook.
+  http: ^1.2.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

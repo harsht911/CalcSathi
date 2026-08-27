@@ -5,6 +5,7 @@ import '../../auth/state/auth_state.dart';
 import '../../calculators/presentation/catalog_screen.dart';
 import '../../calculators/presentation/favorites_screen.dart';
 import '../../calculators/presentation/history_screen.dart';
+import '../../coins/state/coin_state.dart';
 
 /// The signed-in app shell: catalog / favorites / history tabs, plus sign
 /// out. Each tab's screen is built once and kept alive in an [IndexedStack]
@@ -38,6 +39,7 @@ class _HomeShellState extends State<HomeShell> {
         // break this.
         title: Text(_tabIndex == 0 ? 'CalcSathi' : _tabs[_tabIndex].label),
         actions: [
+          const _CoinBalanceChip(),
           IconButton(
             icon: const Icon(Icons.logout),
             tooltip: 'Sign out',
@@ -66,4 +68,27 @@ class _Tab {
   final String label;
   final IconData icon;
   final Widget screen;
+}
+
+/// Live coin balance, shown app-wide in the shell's app bar rather than
+/// per-screen — a user should always be able to see it, not just while
+/// looking at a gated calculator. Reads [CoinState] rather than opening its
+/// own Firestore stream, so it shares the one subscription every other
+/// coin-aware widget (e.g. InsufficientCoinsScreen) already uses.
+class _CoinBalanceChip extends StatelessWidget {
+  const _CoinBalanceChip();
+
+  @override
+  Widget build(BuildContext context) {
+    final balance = context.watch<CoinState>().balance;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Chip(
+        avatar: const Icon(Icons.toll_outlined, size: 18),
+        label: Text('$balance'),
+        visualDensity: VisualDensity.compact,
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
+    );
+  }
 }

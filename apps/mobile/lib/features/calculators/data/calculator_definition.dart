@@ -52,6 +52,7 @@ class CalculatorDefinition {
     required this.resultLabel,
     this.resultSuffix,
     this.resultDecimalPlaces = 2,
+    this.coinCost = 0,
   });
 
   final String id;
@@ -59,6 +60,14 @@ class CalculatorDefinition {
   final String category;
   final String description;
   final List<CalculatorInputField> inputs;
+
+  /// Coins required to open this calculator, checked/spent by
+  /// `openCalculator()` (see `calculator_navigation.dart`) before
+  /// navigating to it. Defaults to 0 (free) so every calculator seeded
+  /// before M3's coin economy landed keeps working exactly as before —
+  /// this is a per-calculator dial Harsh turns on deliberately in
+  /// `calculators.seed.json`, not something this change flips on for him.
+  final int coinCost;
 
   /// Space-tokenized infix formula (e.g. `["principal", "*", "(", ...]`),
   /// parsed into `calc_core` [FormulaToken]s at evaluation time — see
@@ -83,6 +92,7 @@ class CalculatorDefinition {
       resultLabel: data['resultLabel'] as String? ?? 'Result',
       resultSuffix: data['resultSuffix'] as String?,
       resultDecimalPlaces: (data['resultDecimalPlaces'] as num?)?.toInt() ?? 2,
+      coinCost: (data['coinCost'] as num?)?.toInt() ?? 0,
     );
   }
 
