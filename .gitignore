@@ -30,6 +30,7 @@
 server/node_modules/
 server/.env
 server/dist/
+server/lambda-deploy.zip
 
 # Secrets — never commit these
 *.env

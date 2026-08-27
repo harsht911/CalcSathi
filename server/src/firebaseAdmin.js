@@ -1,11 +1,12 @@
 import admin from 'firebase-admin';
 
-// Reads the Firebase service-account key from an env var (set on
-// Render/Railway as a secret) rather than a committed JSON file — see
-// .gitignore, which blocks any *serviceAccountKey*.json from ever being
-// added to the repo. Generate the key in the Firebase console under
-// Project settings -> Service accounts -> Generate new private key, then
-// paste the whole JSON, minified to one line, into FIREBASE_SERVICE_ACCOUNT.
+// Reads the Firebase service-account key from an env var (set as a Lambda
+// environment variable in production — see server/README.md) rather than a
+// committed JSON file — see .gitignore, which blocks any
+// *serviceAccountKey*.json from ever being added to the repo. Generate the
+// key in the Firebase console under Project settings -> Service accounts ->
+// Generate new private key, then paste the whole JSON, minified to one
+// line, into FIREBASE_SERVICE_ACCOUNT.
 let app;
 
 export function getFirebaseAdmin() {
