@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import admin from 'firebase-admin';
 
 import { getFirebaseAdmin } from '../firebaseAdmin.js';
 
@@ -18,8 +19,8 @@ async function requireAuth(req, res, next) {
   }
 
   try {
-    const admin = getFirebaseAdmin();
-    req.user = await admin.auth().verifyIdToken(match[1]);
+    const firebaseApp = getFirebaseAdmin();
+    req.user = await firebaseApp.auth().verifyIdToken(match[1]);
     next();
   } catch {
     res.status(401).json({ error: 'invalid_token' });
@@ -43,8 +44,12 @@ coinsRouter.post('/spend', requireAuth, async (req, res) => {
     return res.status(400).json({ error: 'missing_reason' });
   }
 
-  const admin = getFirebaseAdmin();
-  const db = admin.firestore();
+  // Same shadowing pitfall as requireAuth() above and the RevenueCat
+  // webhook route: getFirebaseAdmin() returns the App instance, not the
+  // `admin` module, so it's named firebaseApp here to keep the real
+  // `admin` import (needed below for admin.firestore.FieldValue) usable.
+  const firebaseApp = getFirebaseAdmin();
+  const db = firebaseApp.firestore();
   const userRef = db.collection('users').doc(req.user.uid);
 
   try {

@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import admin from 'firebase-admin';
 
 import { getFirebaseAdmin } from '../firebaseAdmin.js';
 
@@ -54,8 +55,15 @@ revenueCatWebhookRouter.post('/', async (req, res) => {
   // webhook was first wired up — the real cause was invisible without this
   // catch block and a look at CloudWatch Logs.
   try {
-    const admin = getFirebaseAdmin();
-    const db = admin.firestore();
+    // getFirebaseAdmin() returns the initialized Firebase App instance, not
+    // the top-level `admin` module — using that same name here would shadow
+    // the real `admin` import above and silently break
+    // `admin.firestore.FieldValue`, which only exists as a static on the
+    // module, not on an App instance (an App instance's own `.firestore()`
+    // still works fine as a function call, which is what made this bug easy
+    // to miss until it actually ran).
+    const firebaseApp = getFirebaseAdmin();
+    const db = firebaseApp.firestore();
 
     // TODO: once the Firestore schema for users/{uid} is finalized, replace
     // this with the real entitlement fields (isPremium, expiresAt, plan, ...).
