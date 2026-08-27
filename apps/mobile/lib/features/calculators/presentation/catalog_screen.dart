@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../auth/state/auth_state.dart';
 import '../data/calculator_definition.dart';
 import '../data/calculator_repository.dart';
-import 'calculator_runner_screen.dart';
+import 'calculator_navigation.dart';
 
 /// The calculator catalog — the M2 home screen. Groups calculators by
 /// category (client-side; see [CalculatorRepository.watchCatalog] for why)
@@ -96,9 +96,7 @@ class _CalculatorTile extends StatelessWidget {
       trailing: isFavorite
           ? Icon(Icons.star, color: Theme.of(context).colorScheme.primary)
           : null,
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => CalculatorRunnerScreen(definition: definition)),
-      ),
+      onTap: () => openCalculator(context, definition),
     );
   }
 }
