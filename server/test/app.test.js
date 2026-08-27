@@ -81,3 +81,18 @@ test('POST /coins/spend without a bearer token is rejected', async () => {
     server.close();
   }
 });
+
+test('POST /coins/earn without a bearer token is rejected', async () => {
+  const app = createApp();
+  const server = app.listen(0);
+  const { port } = server.address();
+
+  try {
+    const res = await fetch(`http://127.0.0.1:${port}/coins/earn`, {
+      method: 'POST',
+    });
+    assert.equal(res.status, 401);
+  } finally {
+    server.close();
+  }
+});

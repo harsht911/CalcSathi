@@ -22,13 +22,17 @@ service cloud.firestore {
       allow read: if isOwner(uid) || isAdmin();
 
       // Clients may update their own profile fields, but NEVER coinBalance
-      // directly — that only ever changes via server/'s /coins/spend route,
-      // which writes with the Admin SDK and so bypasses these rules
-      // entirely. This keeps a modified client from just granting itself
-      // coins by writing to Firestore.
-      allow create: if isOwner(uid) && !('coinBalance' in request.resource.data);
+      // or lastEarnAt directly — both only ever change via server/'s
+      // /coins/spend and /coins/earn routes, which write with the Admin
+      // SDK and so bypass these rules entirely. lastEarnAt is protected for
+      // the same reason as coinBalance: it's the cooldown timestamp
+      // /coins/earn checks before granting a reward, so a client that could
+      // reset it directly could just farm unlimited coins by rewriting its
+      // own "last earned" time to the past on every request.
+      allow create: if isOwner(uid) &&
+        !request.resource.data.keys().hasAny(['coinBalance', 'lastEarnAt']);
       allow update: if isOwner(uid) &&
-        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['coinBalance']);
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['coinBalance', 'lastEarnAt']);
       allow delete: if false;
 
       match /coinLedger/{entryId} {

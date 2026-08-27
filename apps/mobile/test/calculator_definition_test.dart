@@ -75,6 +75,37 @@ void main() {
     expect(result, closeTo(22.857, 0.001));
   });
 
+  test('fromFirestore defaults coinCost to 0 when the field is absent', () {
+    final definition = CalculatorDefinition.fromFirestore('bmi', const {
+      'name': 'BMI Calculator',
+      'category': 'Health',
+      'description': '',
+      'inputs': [],
+      'formulaTokens': ['weightKg'],
+      'resultLabel': 'BMI',
+    });
+
+    // Every calculator seeded before M3's coin economy landed has no
+    // coinCost field in Firestore at all — this must keep reading as free,
+    // not crash on a missing field or silently gate something Harsh never
+    // priced.
+    expect(definition.coinCost, 0);
+  });
+
+  test('fromFirestore reads a real coinCost when the field is present', () {
+    final definition = CalculatorDefinition.fromFirestore('emi', const {
+      'name': 'EMI Calculator',
+      'category': 'Loans',
+      'description': '',
+      'inputs': [],
+      'formulaTokens': ['principal'],
+      'resultLabel': 'Monthly EMI',
+      'coinCost': 5,
+    });
+
+    expect(definition.coinCost, 5);
+  });
+
   test('a zero-tenure EMI input surfaces a friendly division-by-zero message, not a crash', () {
     final emi = CalculatorDefinition(
       id: 'emi',
