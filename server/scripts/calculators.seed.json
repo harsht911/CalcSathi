@@ -4,6 +4,7 @@
       "id": "emi",
       "name": "EMI Calculator",
       "category": "Loans",
+      "coinCost": 5,
       "description": "Estimate the monthly instalment (EMI) on a loan given the principal, annual interest rate, and tenure.",
       "inputs": [
         { "key": "principal", "label": "Loan amount", "suffix": "₹", "min": 1 },
@@ -24,6 +25,7 @@
       "id": "sip",
       "name": "SIP Calculator",
       "category": "Investing",
+      "coinCost": 15,
       "description": "Estimate the maturity value of a monthly SIP investment given the expected annual return and tenure.",
       "inputs": [
         { "key": "monthlyInvestment", "label": "Monthly investment", "suffix": "₹", "min": 1 },
@@ -44,6 +46,7 @@
       "id": "bmi",
       "name": "BMI Calculator",
       "category": "Health",
+      "coinCost": 0,
       "description": "Body Mass Index from your weight and height.",
       "inputs": [
         { "key": "weightKg", "label": "Weight", "suffix": "kg", "min": 1, "max": 500 },
@@ -60,6 +63,7 @@
       "id": "gst",
       "name": "GST Calculator",
       "category": "Tax",
+      "coinCost": 50,
       "description": "Add GST to a base amount to see the final price.",
       "inputs": [
         { "key": "amount", "label": "Base amount", "suffix": "₹", "min": 0 },
@@ -76,6 +80,7 @@
       "id": "km-to-miles",
       "name": "KM to Miles Converter",
       "category": "Utilities",
+      "coinCost": 0,
       "description": "Convert a distance from kilometers to miles.",
       "inputs": [
         { "key": "km", "label": "Distance", "suffix": "km", "min": 0 }
@@ -91,6 +96,7 @@
       "id": "loan-eligibility",
       "name": "Loan Eligibility Calculator",
       "category": "Loans",
+      "coinCost": 10,
       "description": "Estimate the maximum loan amount you could be eligible for, based on the EMI you can afford each month.",
       "inputs": [
         { "key": "affordableEmi", "label": "Affordable monthly EMI", "suffix": "₹", "min": 1 },
@@ -111,6 +117,7 @@
       "id": "age",
       "name": "Age Calculator",
       "category": "Utilities",
+      "coinCost": 0,
       "description": "Find your exact age in years, months, and days from your date of birth.",
       "inputs": [],
       "formulaTokens": [],
@@ -122,6 +129,7 @@
       "id": "cgpa",
       "name": "CGPA Calculator",
       "category": "Education",
+      "coinCost": 0,
       "description": "Compute your overall CGPA from each subject's credits and grade point.",
       "inputs": [],
       "formulaTokens": [],
